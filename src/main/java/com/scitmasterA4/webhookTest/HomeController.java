@@ -117,15 +117,15 @@ public class HomeController {
 //						+ "'title' : '번역내용("+tarLangType+")', "
 //						+ "'description' : '"+translatedText+"'"
 //					+ "}]");
-			data.put("connectInfo",
-					"[{"
-							+ "title : '원본내용', "
-							+ "description : '으히히'"
-							+ "}, "
-							+ "{"
-							+ "title : '번역내용', "
-							+ "description : '아리가또'"
-					+ "}]");
+//			data.put("connectInfo",
+//					"[{"
+//							+ "title : '원본내용', "
+//							+ "description : '으히히'"
+//							+ "}, "
+//							+ "{"
+//							+ "title : '번역내용', "
+//							+ "description : '아리가또'"
+//					+ "}]");
 			try {
 				json = mapper.writeValueAsString(data);
 			} catch (JsonProcessingException e) {
