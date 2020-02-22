@@ -22,6 +22,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -64,8 +65,7 @@ public class HomeController {
 	
 	@RequestMapping(value = "/papago", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public String papago(String token, String teamName, String roomName, String writerName, String text, String keyword,
-			String createdAt, HttpServletResponse httpServletResponse, HttpServletRequest httpServletRequest) {
+	public String papago(@RequestBody Map<String, Object> request, HttpServletResponse httpServletResponse) {
 		
 		String translateUrl = "https://openapi.naver.com/v1/papago/n2mt";
 		String XNaverClientId = "Bh9GX6eaqwK4vmyWdvGV";
@@ -83,30 +83,12 @@ public class HomeController {
 		Map<String, Map<String, Map<String, String>>> res = restTemplate.postForObject(translateUrl, req, Map.class);
 		String srcLangType = res.get("message").get("result").get("srcLangType"); //번역할 원본 언어의 언어 코드
 		String tarLangType = res.get("message").get("result").get("tarLangType"); //번역한 목적 언어의 언어 코드
-		String translatedText = res.get("message").get("result").get("translatedText"); //번역된 텍스트
-		
-		ServletInputStream mServletInputStream;
-		StringBuilder stringBuilder = new StringBuilder();
-		try {
-			mServletInputStream = httpServletRequest.getInputStream();
-	    byte[] httpInData = new byte[httpServletRequest.getContentLength()];
-	    int retVal = -1;
-			while ((retVal = mServletInputStream.read(httpInData)) != -1) {
-			    for (int i = 0; i < retVal; i++) {
-			        stringBuilder.append(Character.toString((char) httpInData[i]));
-			    }
-			}
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 
-	    String strReq =  stringBuilder.toString();
 		
 		String json = "";
 		ObjectMapper mapper = new ObjectMapper();
 		HashMap<String, Object> data = new HashMap<String, Object>();
-		data.put("body", "파파고번역"+strReq);
+		data.put("body", "파파고번역"+(String) request.get("token"));
 		data.put("connectColor", "#FAC11B");
 		try {
 			json = mapper.writeValueAsString(data);
