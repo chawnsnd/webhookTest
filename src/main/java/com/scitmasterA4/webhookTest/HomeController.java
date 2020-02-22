@@ -45,6 +45,7 @@ public class HomeController {
 
 	@Autowired
 	private RestTemplate restTemplate;
+
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -66,54 +67,80 @@ public class HomeController {
 	public String goPapago() {
 		return "papago";
 	}
-	
-	@RequestMapping(value = "/papago", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+
+	@RequestMapping(value = "/papago", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String papago(@RequestBody Map<String, Object> request, HttpServletResponse httpServletResponse) {
-		
-		String text = (String) request.get("text");
-		String keyword = (String) request.get("keyword");
-		text = text.substring(keyword.length()+1);
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("X-Naver-Client-Id", XNaverClientId);
-		headers.set("X-Naver-Client-Secret", XNaverClientSecret);		
-		HashMap<String, String> body1 = new HashMap<String, String>();
-		body1.put("query", text);
-		HttpEntity<HashMap> req1 = new HttpEntity<HashMap>(body1, headers);
-		String detectUrl = "https://openapi.naver.com/v1/papago/detectLangs";
-		Map<String, String> res1 = restTemplate.postForObject(detectUrl, req1, Map.class);
-
-		String source = res1.get("langCode");
-		String target = "";
-		if(source.equals("ko")) {
-			target = "ja";
-		}else {
-			target = "ko";
-		}
-		HashMap<String, String> body2 = new HashMap<String, String>();
-		body2.put("source", source);
-		body2.put("target", target);
-		body2.put("text", text);
-		HttpEntity<HashMap> req2 = new HttpEntity<HashMap>(body2, headers);
-		
-		Map<String, Map<String, Map<String, String>>> res2 = restTemplate.postForObject(translateUrl, req2, Map.class);
-		String srcLangType = res2.get("message").get("result").get("srcLangType"); //번역할 원본 언어의 언어 코드
-		String tarLangType = res2.get("message").get("result").get("tarLangType"); //번역한 목적 언어의 언어 코드
-		String translatedText = res2.get("message").get("result").get("translatedText"); //번역된 텍스트
-
-		String json = "";
-		ObjectMapper mapper = new ObjectMapper();
-		HashMap<String, Object> data = new HashMap<String, Object>();
-		data.put("body", "원본글: "+text+"("+source+"), 번역글"+translatedText+"("+target+")");
-		data.put("connectColor", "#FAC11B");
 		try {
-			json = mapper.writeValueAsString(data);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
+			String text = (String) request.get("text");
+			String keyword = (String) request.get("keyword");
+			text = text.substring(keyword.length() + 1);
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.set("X-Naver-Client-Id", XNaverClientId);
+			headers.set("X-Naver-Client-Secret", XNaverClientSecret);
+			HashMap<String, String> body1 = new HashMap<String, String>();
+			body1.put("query", text);
+			HttpEntity<HashMap> req1 = new HttpEntity<HashMap>(body1, headers);
+			String detectUrl = "https://openapi.naver.com/v1/papago/detectLangs";
+			Map<String, String> res1 = restTemplate.postForObject(detectUrl, req1, Map.class);
+
+			String source = res1.get("langCode");
+			String target = "";
+			if (source.equals("ko")) {
+				target = "ja";
+			} else {
+				target = "ko";
+			}
+			HashMap<String, String> body2 = new HashMap<String, String>();
+			body2.put("source", source);
+			body2.put("target", target);
+			body2.put("text", text);
+			HttpEntity<HashMap> req2 = new HttpEntity<HashMap>(body2, headers);
+
+			Map<String, Map<String, Map<String, String>>> res2 = restTemplate.postForObject(translateUrl, req2,
+					Map.class);
+			String srcLangType = res2.get("message").get("result").get("srcLangType"); // 번역할 원본 언어의 언어 코드
+			String tarLangType = res2.get("message").get("result").get("tarLangType"); // 번역한 목적 언어의 언어 코드
+			String translatedText = res2.get("message").get("result").get("translatedText"); // 번역된 텍스트
+			String json = "";
+			ObjectMapper mapper = new ObjectMapper();
+			HashMap<String, Object> data = new HashMap<String, Object>();
+//			"connectInfo" : [{
+//				"title" : "Topping",
+//				"description" : "Pepperoni"
+//				},
+//				{
+//				"title": "Location",
+//				"description": "Empire State Building, 5th Ave, New York",
+//				}]
+//			
+//			data.put("body", "원본글: " + text + "(" + source + "), 번역글" + translatedText + "(" + target + ")");
+			data.put("body", "파파고로 돌려봤어요!");
+			data.put("connectInfo", "[{'원본 언어' : '"+srcLangType+"', '원본 내용' : '"+text+"'}, {'번역된 언어' : '"+tarLangType+"', '번역 내용' : '"+translatedText+"'}]");
+			data.put("connectColor", "#FAC11B");
+			try {
+				json = mapper.writeValueAsString(data);
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
+			httpServletResponse.addHeader("Accept", "application/vnd.tosslab.jandi-v2+json");
+			httpServletResponse.addHeader("Content-Type", "application/json");
+			return json;
+		} catch (Exception e) {
+			String json = "";
+			ObjectMapper mapper = new ObjectMapper();
+			HashMap<String, Object> data = new HashMap<String, Object>();
+			data.put("body", "익셉션 발생");
+			data.put("connectColor", "#FAC11B");
+			try {
+				json = mapper.writeValueAsString(data);
+			} catch (JsonProcessingException e2) {
+				e2.printStackTrace();
+			}
+			httpServletResponse.addHeader("Accept", "application/vnd.tosslab.jandi-v2+json");
+			httpServletResponse.addHeader("Content-Type", "application/json");
+			return json;
 		}
-		httpServletResponse.addHeader("Accept", "application/vnd.tosslab.jandi-v2+json");
-		httpServletResponse.addHeader("Content-Type", "application/json");
-		return json;
 	}
 }
