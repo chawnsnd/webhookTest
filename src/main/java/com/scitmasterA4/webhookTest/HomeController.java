@@ -1,6 +1,7 @@
 package com.scitmasterA4.webhookTest;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -80,9 +81,10 @@ public class HomeController {
 		
 		String json = "";
 		ObjectMapper mapper = new ObjectMapper();
-		HashMap<String, String> data = new HashMap<String, String>();
-//		data.put("body", text+" -> "+translatedText);
-		data.put("body", "[핑퐁테스트] token: "+token+", teamName: "+teamName+", roomName: "+roomName+", writerName: "+writerName+", text: "+text+", keyword: "+keyword+", createdAt: "+createdAt);
+		HashMap<String, Object> data = new HashMap<String, Object>();
+		data.put("body", "파파고번역");
+		data.put("connectColor", "#FAC11B");
+//		data.put("body", "[핑퐁테스트] token: "+token+", teamName: "+teamName+", roomName: "+roomName+", writerName: "+writerName+", text: "+text+", keyword: "+keyword+", createdAt: "+createdAt);
 		try {
 			json = mapper.writeValueAsString(data);
 		} catch (JsonProcessingException e) {
