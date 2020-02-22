@@ -59,7 +59,7 @@ public class HomeController {
 		return "papago";
 	}
 	
-	@RequestMapping(value = "/papago", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
+	@RequestMapping(value = "/papago", method = RequestMethod.POST)
 	@ResponseBody
 	public String papago(String token, String teamName, String roomName, String writerName, String text, String keyword,
 			String createdAt, HttpServletResponse httpServletResponse) {
