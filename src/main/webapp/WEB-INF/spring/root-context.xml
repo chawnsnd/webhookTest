@@ -4,5 +4,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
-		
+			
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+    </bean>
 </beans>
