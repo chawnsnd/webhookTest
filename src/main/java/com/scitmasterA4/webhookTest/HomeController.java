@@ -74,14 +74,15 @@ public class HomeController {
 		HttpEntity<HashMap> req = new HttpEntity<HashMap>(body, headers);
 		
 		Map<String, Map<String, Map<String, String>>> res = restTemplate.postForObject(translateUrl, req, Map.class);
-
-		String translatedText = res.get("message").get("result").get("translatedText");
+		String srcLangType = res.get("message").get("result").get("srcLangType"); //번역할 원본 언어의 언어 코드
+		String tarLangType = res.get("message").get("result").get("tarLangType"); //번역한 목적 언어의 언어 코드
+		String translatedText = res.get("message").get("result").get("translatedText"); //번역된 텍스트
 		
 		String json = "";
 		ObjectMapper mapper = new ObjectMapper();
 		HashMap<String, String> data = new HashMap<String, String>();
-		data.put("body", text+" -> "+translatedText);
-//		data.put("body", "[핑퐁테스트] token: "+token+", teamName: "+teamName+", roomName: "+roomName+", writerName: "+writerName+", text: "+text+", keyword: "+keyword+", createdAt: "+createdAt);
+//		data.put("body", text+" -> "+translatedText);
+		data.put("body", "[핑퐁테스트] token: "+token+", teamName: "+teamName+", roomName: "+roomName+", writerName: "+writerName+", text: "+text+", keyword: "+keyword+", createdAt: "+createdAt);
 		try {
 			json = mapper.writeValueAsString(data);
 		} catch (JsonProcessingException e) {
