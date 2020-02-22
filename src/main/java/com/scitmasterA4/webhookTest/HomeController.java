@@ -107,8 +107,25 @@ public class HomeController {
 			ObjectMapper mapper = new ObjectMapper();
 			HashMap<String, Object> data = new HashMap<String, Object>();
 			data.put("body", "파파고로 돌려봤어요!");
-			data.put("connectInfo", "[{'title' : '원본내용("+srcLangType+")', 'description' : '"+text+"'}, {'title' : '번역내용("+tarLangType+")', 'description' : '"+translatedText+"'}]");
 			data.put("connectColor", "#FAC11B");
+//			data.put("connectInfo",
+//					"[{"
+//						+ "'title' : '원본내용("+srcLangType+")', "
+//						+ "'description' : '"+text+"'"
+//					+ "}, "
+//					+ "{"
+//						+ "'title' : '번역내용("+tarLangType+")', "
+//						+ "'description' : '"+translatedText+"'"
+//					+ "}]");
+			data.put("connectInfo",
+					"[{"
+							+ "'title' : '원본내용', "
+							+ "'description' : '으히히'"
+							+ "}, "
+							+ "{"
+							+ "'title' : '번역내용', "
+							+ "'description' : '아리가또'"
+					+ "}]");
 			try {
 				json = mapper.writeValueAsString(data);
 			} catch (JsonProcessingException e) {
@@ -122,7 +139,6 @@ public class HomeController {
 			ObjectMapper mapper = new ObjectMapper();
 			HashMap<String, Object> data = new HashMap<String, Object>();
 			data.put("body", "익셉션 발생");
-			data.put("connectColor", "#FAC11B");
 			try {
 				json = mapper.writeValueAsString(data);
 			} catch (JsonProcessingException e2) {
