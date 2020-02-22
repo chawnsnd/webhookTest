@@ -72,6 +72,9 @@ public class HomeController {
 	public String papago(@RequestBody Map<String, Object> request, HttpServletResponse httpServletResponse) {
 		
 		String text = (String) request.get("text");
+		String keyword = (String) request.get("keyword");
+		text = text.substring(keyword.length()+1);
+		
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("X-Naver-Client-Id", XNaverClientId);
 		headers.set("X-Naver-Client-Secret", XNaverClientSecret);		
