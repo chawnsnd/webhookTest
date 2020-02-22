@@ -114,11 +114,6 @@ public class HomeController {
 			Info srcInfo = new Info("원본내용("+srcLangType+")", text);
 			Info tarInfo = new Info("번역내용("+tarLangType+")", translatedText);
 			
-//			JSONPObject info = new JSONPObject("title", "원본내용("+srcLangType+")");
-//			JSONPObject info = new JSONPObject("description", "원본내용("+srcLangType+")");
-//			Info[] connectInfo = new Info[2];
-//			connectInfo[0] = srcInfo;
-//			connectInfo[1] = tarInfo;
 			Info[] connectInfo = new Info[2];
 			connectInfo[0] = srcInfo;
 			connectInfo[1] = tarInfo;
