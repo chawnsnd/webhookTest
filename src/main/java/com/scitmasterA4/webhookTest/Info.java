@@ -3,16 +3,16 @@ package com.scitmasterA4.webhookTest;
 public class Info {
 
 	private String title;
-	private String decription;
+	private String description;
 
 	public Info() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Info(String title, String decription) {
+	public Info(String title, String description) {
 		super();
 		this.title = title;
-		this.decription = decription;
+		this.description = description;
 	}
 
 	public String getTitle() {
@@ -23,17 +23,17 @@ public class Info {
 		this.title = title;
 	}
 
-	public String getDecription() {
-		return decription;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDecription(String decription) {
-		this.decription = decription;
+	public void setDecription(String description) {
+		this.description = description;
 	}
 
 	@Override
 	public String toString() {
-		return "Info [title=" + title + ", decription=" + decription + "]";
+		return "Info [title=" + title + ", description=" + description + "]";
 	}
 
 	
