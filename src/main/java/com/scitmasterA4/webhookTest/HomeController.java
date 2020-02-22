@@ -3,12 +3,16 @@ package com.scitmasterA4.webhookTest;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,28 +50,37 @@ public class HomeController {
 		return "home";
 	}
 
-	@RequestMapping(value = "/papago", method = RequestMethod.POST)
+	@RequestMapping(value = "/papago", method = RequestMethod.GET)
+	public String goPapago() {
+		return "papago";
+	}
+	
+	@RequestMapping(value = "/papago", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
 	@ResponseBody
 	public String papago(String token, String teamName, String roomName, String writerName, String text, String keyword,
 			String createdAt) {
 		
 		String translateUrl = "https://openapi.naver.com/v1/papago/n2mt";
-//		
-//		source	String	Y	원본 언어(source language)의 언어 코드
-//		target	String	Y	목적 언어(target language)의 언어 코드
-//		text	String	Y	번역할 텍스트. 1회 호출 시 최대 5,000자까지 번역할 수 있습니다.
-//		
-		HashMap<String, String> req = new HashMap<String, String>();
-		req.put("source", "ko");
-		req.put("target", "ja");
-		req.put("text", "안녕하세요");
-		Map<String, String> res = restTemplate.postForObject(translateUrl, req, Map.class);
-		String trnaslatedText = res.get("translatedText");
-			
+		String XNaverClientId = "Bh9GX6eaqwK4vmyWdvGV";
+		String XNaverClientSecret = "E3JIZxnlHD";
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("X-Naver-Client-Id", XNaverClientId);
+		headers.set("X-Naver-Client-Secret", XNaverClientSecret);		
+		HashMap<String, String> body = new HashMap<String, String>();
+		body.put("source", "ko");
+		body.put("target", "ja");
+		body.put("text", "안녕하세요");
+		HttpEntity<HashMap> req = new HttpEntity<HashMap>(body, headers);
+		
+		Map<String, Map<String, Map<String, String>>> res = restTemplate.postForObject(translateUrl, req, Map.class);
+
+		String translatedText = res.get("message").get("result").get("translatedText");
+		
 		String json = "";
 		ObjectMapper mapper = new ObjectMapper();
 		HashMap<String, String> data = new HashMap<String, String>();
-		data.put("body", "안녕하세요 -> "+trnaslatedText);
+		data.put("body", text+" -> "+translatedText);
 //		data.put("body", "[핑퐁테스트] token: "+token+", teamName: "+teamName+", roomName: "+roomName+", writerName: "+writerName+", text: "+text+", keyword: "+keyword+", createdAt: "+createdAt);
 		try {
 			json = mapper.writeValueAsString(data);
