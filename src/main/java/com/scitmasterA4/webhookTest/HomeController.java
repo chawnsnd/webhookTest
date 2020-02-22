@@ -106,18 +106,8 @@ public class HomeController {
 			String json = "";
 			ObjectMapper mapper = new ObjectMapper();
 			HashMap<String, Object> data = new HashMap<String, Object>();
-//			"connectInfo" : [{
-//				"title" : "Topping",
-//				"description" : "Pepperoni"
-//				},
-//				{
-//				"title": "Location",
-//				"description": "Empire State Building, 5th Ave, New York",
-//				}]
-//			
-//			data.put("body", "원본글: " + text + "(" + source + "), 번역글" + translatedText + "(" + target + ")");
 			data.put("body", "파파고로 돌려봤어요!");
-			data.put("connectInfo", "[{'원본 언어' : '"+srcLangType+"', '원본 내용' : '"+text+"'}, {'번역된 언어' : '"+tarLangType+"', '번역 내용' : '"+translatedText+"'}]");
+			data.put("connectInfo", "[{'title' : '원본내용("+srcLangType+")', 'description' : '"+text+"'}, {'title' : '번역내용("+tarLangType+")', 'description' : '"+translatedText+"'}]");
 			data.put("connectColor", "#FAC11B");
 			try {
 				json = mapper.writeValueAsString(data);
