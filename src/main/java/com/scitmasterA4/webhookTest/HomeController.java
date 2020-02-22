@@ -85,9 +85,8 @@ public class HomeController {
 		String json = "";
 		ObjectMapper mapper = new ObjectMapper();
 		HashMap<String, Object> data = new HashMap<String, Object>();
-		data.put("body", "파파고번역");
+		data.put("body", "파파고번역"+token);
 		data.put("connectColor", "#FAC11B");
-		data.put("token", token);
 		try {
 			json = mapper.writeValueAsString(data);
 		} catch (JsonProcessingException e) {
