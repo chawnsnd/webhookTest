@@ -113,9 +113,10 @@ public class HomeController {
 			Info srcInfo = new Info("원본내용("+srcLangType+")", text);
 			Info tarInfo = new Info("번역내용("+tarLangType+")", translatedText);
 			
-			ArrayList<Info> connectInfo = new ArrayList<Info>();
-			connectInfo.add(srcInfo);
-			connectInfo.add(tarInfo);
+			Info[] connectInfo = new Info[2];
+			connectInfo[0] = srcInfo;
+			connectInfo[1] = tarInfo;
+			
 			data.put("connectInfo", connectInfo);
 			try {
 				json = mapper.writeValueAsString(data);
