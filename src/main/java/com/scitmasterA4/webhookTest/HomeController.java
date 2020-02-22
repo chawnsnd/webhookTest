@@ -39,6 +39,10 @@ public class HomeController {
 
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
+	String translateUrl = "https://openapi.naver.com/v1/papago/n2mt";
+	String XNaverClientId = "Bh9GX6eaqwK4vmyWdvGV";
+	String XNaverClientSecret = "E3JIZxnlHD";
+
 	@Autowired
 	private RestTemplate restTemplate;
 	/**
@@ -67,28 +71,38 @@ public class HomeController {
 	@ResponseBody
 	public String papago(@RequestBody Map<String, Object> request, HttpServletResponse httpServletResponse) {
 		
-		String translateUrl = "https://openapi.naver.com/v1/papago/n2mt";
-		String XNaverClientId = "Bh9GX6eaqwK4vmyWdvGV";
-		String XNaverClientSecret = "E3JIZxnlHD";
-
+		String text = (String) request.get("text");
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("X-Naver-Client-Id", XNaverClientId);
 		headers.set("X-Naver-Client-Secret", XNaverClientSecret);		
-		HashMap<String, String> body = new HashMap<String, String>();
-		body.put("source", "ko");
-		body.put("target", "ja");
-		body.put("text", "안녕하세요");
-		HttpEntity<HashMap> req = new HttpEntity<HashMap>(body, headers);
-		
-		Map<String, Map<String, Map<String, String>>> res = restTemplate.postForObject(translateUrl, req, Map.class);
-		String srcLangType = res.get("message").get("result").get("srcLangType"); //번역할 원본 언어의 언어 코드
-		String tarLangType = res.get("message").get("result").get("tarLangType"); //번역한 목적 언어의 언어 코드
+		HashMap<String, String> body1 = new HashMap<String, String>();
+		body1.put("query", text);
+		HttpEntity<HashMap> req1 = new HttpEntity<HashMap>(body1, headers);
+		String detectUrl = "https://openapi.naver.com/v1/papago/detectLangs";
+		Map<String, String> res1 = restTemplate.postForObject(detectUrl, req1, Map.class);
 
+		String source = res1.get("langCode");
+		String target = "";
+		if(source.equals("ko")) {
+			target = "ja";
+		}else {
+			target = "ko";
+		}
+		HashMap<String, String> body2 = new HashMap<String, String>();
+		body2.put("source", source);
+		body2.put("target", target);
+		body2.put("text", text);
+		HttpEntity<HashMap> req2 = new HttpEntity<HashMap>(body2, headers);
 		
+		Map<String, Map<String, Map<String, String>>> res2 = restTemplate.postForObject(translateUrl, req2, Map.class);
+		String srcLangType = res2.get("message").get("result").get("srcLangType"); //번역할 원본 언어의 언어 코드
+		String tarLangType = res2.get("message").get("result").get("tarLangType"); //번역한 목적 언어의 언어 코드
+		String translatedText = res2.get("message").get("result").get("translatedText"); //번역된 텍스트
+
 		String json = "";
 		ObjectMapper mapper = new ObjectMapper();
 		HashMap<String, Object> data = new HashMap<String, Object>();
-		data.put("body", "파파고번역"+(String) request.get("token"));
+		data.put("body", "원본글: "+text+"("+source+"), 번역글"+text+"("+target+")");
 		data.put("connectColor", "#FAC11B");
 		try {
 			json = mapper.writeValueAsString(data);
