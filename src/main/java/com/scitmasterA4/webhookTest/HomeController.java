@@ -107,25 +107,16 @@ public class HomeController {
 			ObjectMapper mapper = new ObjectMapper();
 			HashMap<String, Object> data = new HashMap<String, Object>();
 			data.put("body", "파파고로 돌려봤어요!");
+			
 			data.put("connectColor", "#FAC11B");
-//			data.put("connectInfo",
-//					"[{"
-//						+ "'title' : '원본내용("+srcLangType+")', "
-//						+ "'description' : '"+text+"'"
-//					+ "}, "
-//					+ "{"
-//						+ "'title' : '번역내용("+tarLangType+")', "
-//						+ "'description' : '"+translatedText+"'"
-//					+ "}]");
-//			data.put("connectInfo",
-//					"[{"
-//							+ "title : '원본내용', "
-//							+ "description : '으히히'"
-//							+ "}, "
-//							+ "{"
-//							+ "title : '번역내용', "
-//							+ "description : '아리가또'"
-//					+ "}]");
+			
+			Info srcInfo = new Info("원본내용("+srcLangType+")", text);
+			Info tarInfo = new Info("번역내용("+tarLangType+")", translatedText);
+			
+			ArrayList<Info> connectInfo = new ArrayList<Info>();
+			connectInfo.add(srcInfo);
+			connectInfo.add(tarInfo);
+			data.put("connectInfo", connectInfo);
 			try {
 				json = mapper.writeValueAsString(data);
 			} catch (JsonProcessingException e) {
