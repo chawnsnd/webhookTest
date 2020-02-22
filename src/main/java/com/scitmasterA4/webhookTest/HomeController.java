@@ -102,7 +102,7 @@ public class HomeController {
 		String json = "";
 		ObjectMapper mapper = new ObjectMapper();
 		HashMap<String, Object> data = new HashMap<String, Object>();
-		data.put("body", "원본글: "+text+"("+source+"), 번역글"+text+"("+target+")");
+		data.put("body", "원본글: "+text+"("+source+"), 번역글"+translatedText+"("+target+")");
 		data.put("connectColor", "#FAC11B");
 		try {
 			json = mapper.writeValueAsString(data);
