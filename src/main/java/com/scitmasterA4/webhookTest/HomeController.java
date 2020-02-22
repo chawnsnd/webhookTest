@@ -9,6 +9,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +62,7 @@ public class HomeController {
 	@RequestMapping(value = "/papago", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
 	@ResponseBody
 	public String papago(String token, String teamName, String roomName, String writerName, String text, String keyword,
-			String createdAt) {
+			String createdAt, HttpServletResponse httpServletResponse) {
 		
 		String translateUrl = "https://openapi.naver.com/v1/papago/n2mt";
 		String XNaverClientId = "Bh9GX6eaqwK4vmyWdvGV";
@@ -90,6 +93,8 @@ public class HomeController {
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
+		httpServletResponse.addHeader("Accept", "application/vnd.tosslab.jandi-v2+json");
+		httpServletResponse.addHeader("Content-Type", "application/json");
 		return json;
 	}
 }
