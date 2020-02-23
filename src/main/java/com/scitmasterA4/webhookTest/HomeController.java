@@ -75,7 +75,7 @@ public class HomeController {
 		try {
 			String text = (String) request.get("text");
 			String keyword = (String) request.get("keyword");
-			text = text.substring(keyword.length() + 1);
+			text = text.substring(keyword.length() + 2);
 
 			HttpHeaders headers = new HttpHeaders();
 			headers.set("X-Naver-Client-Id", XNaverClientId);
